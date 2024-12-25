@@ -74,19 +74,28 @@ pub fn copy_string(text: &str) -> Result<()> {
 	}
 
 	if exec_copy_with_args(
-		"xclip",
-		&["-selection", "clipboard"],
+		"lemonade",
+		&["copy"],
 		text,
 		false,
 	)
 	.is_err()
 	{
-		return exec_copy_with_args(
-			"xsel",
-			&["--clipboard"],
+		if exec_copy_with_args(
+			"xclip",
+			&["-selection", "clipboard"],
 			text,
-			true,
-		);
+			false,
+		)
+		.is_err()
+		{
+			return exec_copy_with_args(
+				"xsel",
+				&["--clipboard"],
+				text,
+				true,
+			);
+		}
 	}
 
 	Ok(())
